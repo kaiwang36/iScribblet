@@ -168,13 +168,14 @@
         position = 'static';
     }
     _appendChild(textDisplay, undoButton);
+    var history = []
     function undo() {
         undoButton.style.background = '#929292';
         var i = scribble.length - 1;
         var hits = 0;
         while (i >= 0 && scribble[i] == -1) {
             i--;
-            scribble.pop();
+            history.push(scribble.pop());
         }
         while (i >= 0) {
             if (scribble[i--] == -1) {
@@ -182,7 +183,7 @@
             }
             hits++;
             //alert("poping");
-            scribble.pop();
+            history.push(scribble.pop());
         }
         if (hits) {
             repaint();
@@ -198,6 +199,41 @@
                                     return false;
                                 }, false);
 
+    var redoButton = _createElement('a');
+    with (redoButton) {
+        innerHTML = '<span style="color: #000; padding: 1em">Redo</span>';
+        border = '1px solid #000';
+        padding = '15px';
+        margin = '10px';
+        font = 'bold 14px sans-serif';
+        position = 'static';
+    }
+    _appendChild(textDisplay, redoButton);
+    function redo() {
+        redoButton.style.background = '#929292';
+        var i = history.length - 1;
+        var hits = 0;
+        while (i >= 0) {
+            var point = history.pop();
+            scribble.push(point);
+            hits++;
+            if (point == -1) {
+                break;
+            }
+        }
+        if (hits) {
+            repaint();
+        }
+        //alert(hits + " hits.");
+        return false;
+    }
+
+    redoButton.addEventListener("mousedown", redo, false);
+    redoButton.addEventListener("mouseup",
+        function () {
+            redoButton.style.background = '#F2F2F2';
+            return false;
+        }, false);
 
     var msgArea = _createElement('div');
     style = msgArea.style
