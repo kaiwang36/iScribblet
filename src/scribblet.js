@@ -72,7 +72,7 @@
     colorIndex = 0;
     strokeColor = 'red';
 
-    // Holds the internal representation of the current scribbble
+    // Holds the internal representation of the current scribble
     scribble = [];
 
     // Create canvas, info display, copy & paste bin
@@ -168,11 +168,13 @@
         position = 'static';
     }
     _appendChild(textDisplay, undoButton);
+
     var history = []
     function undo() {
         undoButton.style.background = '#929292';
         var i = scribble.length - 1;
         var hits = 0;
+        //process the first -1
         while (i >= 0 && scribble[i] == -1) {
             i--;
             history.push(scribble.pop());
@@ -469,6 +471,7 @@
         lastX = e.clientX;
         lastY = e.clientY;
         saved = false;
+        history = [];
         scribble.push(lastX + scrollLeft);
         scribble.push(lastY + scrollTop);
     };
@@ -480,6 +483,7 @@
 
         isMouseDown = false;
         saved = false;
+        history = [];
         scribble.push(e.clientX + scrollLeft);
         scribble.push(e.clientY + scrollTop);
         scribble.push(-1);
@@ -507,6 +511,7 @@
         }
 
         saved = false;
+        history = [];
         scribble.push(x + scrollLeft);
         scribble.push(y + scrollTop);
 
@@ -552,6 +557,7 @@
 
         //alert("touch start: " + lastX + ", " + lastY);
         saved = false;
+        history = [];
         scribble.push(lastX + scrollLeft);
         scribble.push(lastY + scrollTop);
         e.preventDefault();
@@ -609,6 +615,7 @@
 
         //alert("touch move: " + temp + " " + temp2);
         saved = false;
+        history = [];
         scribble.push(x + scrollLeft);
         scribble.push(y + scrollTop);
 
